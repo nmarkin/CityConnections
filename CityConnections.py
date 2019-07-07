@@ -248,7 +248,7 @@ for i in range(0, len(roads)):
         time += str(minutes) + " minutes"
     folium.PolyLine(locations=line, weight=5, color='green', tooltip="distance: " + dist + ";  time: " + time).add_to(the_map)
 
-    # Inconvenient google maps
+    # Plotting more accurate roads via google roads api
     directions = gmaps.directions(coords_1, coords_2)
     if(directions):
         start_lat = directions[0]['legs'][0]['steps'][0]['start_location']['lat']
@@ -268,14 +268,11 @@ for i in range(0, len(roads)):
         points_on_roads = []
 
         for el in longline:
-            # print(str(el) + "orig")
             res = gmaps.snap_to_roads(el, True)
             for k in res:
                 point_lat = k['location']['latitude']
                 point_lng = k['location']['longitude']
                 points_on_roads.append([point_lat, point_lng])
-                # print([point_lat, point_lng])
-            # print()
 
         start = points_on_roads[0]
         for el in points_on_roads:
@@ -290,7 +287,7 @@ folium.TileLayer('stamenterrain').add_to(the_map)
 folium.TileLayer('CartoDB dark_matter').add_to(the_map)
 folium.LayerControl().add_to(the_map)
 
-# Save map
+# Save and open the map
 the_map.save("map.html")
 print("Map has been saved.")
 webbrowser.open('map.html')
